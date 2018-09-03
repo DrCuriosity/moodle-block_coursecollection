@@ -26,11 +26,11 @@ defined('MOODLE_INTERNAL') || die();
 
 class block_coursecollection extends block_base {
 
-    function init() {
+    public function init() {
         $this->title = get_string('pluginname', 'block_coursecollection');
     }
 
-    function get_content() {
+    public function get_content() {
         global $CFG, $OUTPUT;
 
         if ($this->content !== null) {
@@ -45,9 +45,9 @@ class block_coursecollection extends block_base {
         $this->content = new stdClass();
         $this->content->items = array();
         $this->content->icons = array();
-        $this->content->footer = '';
+        $this->content->footer = 'test course collection block';
 
-        // user/index.php expect course context, so get one if page has module context.
+        // The user/index.php expects course context, so get one if page has module context.
         $currentcontext = $this->page->context->get_course_context(false);
 
         if (! empty($this->config->text)) {
@@ -69,7 +69,7 @@ class block_coursecollection extends block_base {
         return $this->content;
     }
 
-    // my moodle can only have SITEID and it's redundant here, so take it away
+    // My moodle can only have SITEID and it's redundant here, so take it away.
     public function applicable_formats() {
         return array('all' => false,
                      'site' => true,
@@ -84,12 +84,14 @@ class block_coursecollection extends block_base {
           return true;
     }
 
-    function has_config() {return true;}
+    public function has_config() {
+        return true;
+    }
 
     public function cron() {
             mtrace( "Hey, my cron script is running" );
 
-                 // do something
+                 // Do something.
 
                       return true;
     }

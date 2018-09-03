@@ -17,9 +17,9 @@
 /**
  * coursecollection block caps.
  *
- * @package    block_coursecollection
- * @copyright  Daniel Neis <danielneis@gmail.com>
- * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ * @package   block_coursecollection
+ * @copyright David Thompson <david.thompson@catalyst.net.nz>
+ * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
 defined('MOODLE_INTERNAL') || die();
