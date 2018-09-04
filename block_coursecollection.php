@@ -45,7 +45,8 @@ class block_coursecollection extends block_base {
         $this->content = new stdClass();
         $this->content->items = array();
         $this->content->icons = array();
-        $this->content->footer = 'test course collection block';
+        $this->content->text = 'test course collection block';
+        $this->content->footer = 'test course collection block footer';
 
         // The user/index.php expects course context, so get one if page has module context.
         $currentcontext = $this->page->context->get_course_context(false);
