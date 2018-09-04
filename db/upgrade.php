@@ -24,16 +24,18 @@ function xmldb_mymodule_upgrade($oldversion) {
     // PHP code from XMLDB Editor.
     if ($oldversion < 2018090300) {
 
-        // Define table block_coursecollection to be created.
-        $table = new xmldb_table('block_coursecollection');
+        // Define table user_course_map to be created.
+        $table = new xmldb_table('block_coursecollection_map');
 
-        // Adding fields to table block_coursecollection.
+        // Adding fields to table user_course_map.
         $table->add_field('id', XMLDB_TYPE_INTEGER, '10', null, XMLDB_NOTNULL, XMLDB_SEQUENCE, null);
+        $table->add_field('userid', XMLDB_TYPE_INTEGER, '10', null, XMLDB_NOTNULL, null, null);
+        $table->add_field('courseid', XMLDB_TYPE_INTEGER, '10', null, XMLDB_NOTNULL, null, null);
 
-        // Adding keys to table block_coursecollection.
+        // Adding keys to table user_course_map.
         $table->add_key('primary', XMLDB_KEY_PRIMARY, array('id'));
 
-        // Conditionally launch create table for block_coursecollection.
+        // Conditionally launch create table for user_course_map.
         if (!$dbman->table_exists($table)) {
             $dbman->create_table($table);
         }

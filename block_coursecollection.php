@@ -31,7 +31,7 @@ class block_coursecollection extends block_base {
     }
 
     public function get_content() {
-        global $CFG, $OUTPUT;
+        global $CFG, $OUTPUT, $DB, $USER;
 
         if ($this->content !== null) {
             return $this->content;
@@ -45,7 +45,6 @@ class block_coursecollection extends block_base {
         $this->content = new stdClass();
         $this->content->items = array();
         $this->content->icons = array();
-        $this->content->text = 'test course collection block';
         $this->content->footer = 'test course collection block footer';
 
         // The user/index.php expects course context, so get one if page has module context.
@@ -55,7 +54,7 @@ class block_coursecollection extends block_base {
             $this->content->text = $this->config->text;
         }
 
-        $this->content = '';
+        $this->content->text = '';
         if (empty($currentcontext)) {
             return $this->content;
         }
@@ -66,6 +65,8 @@ class block_coursecollection extends block_base {
         if (! empty($this->config->text)) {
             $this->content->text .= $this->config->text;
         }
+
+        $DB->get_records('block_coursecollection_map', array('userid' => $USER->id));
 
         return $this->content;
     }
