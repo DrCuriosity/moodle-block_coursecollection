@@ -30,3 +30,4 @@ $string['labelfoo'] = 'Config label';
 $string['coursecollection:addinstance'] = 'Add a course collection block';
 $string['coursecollection:myaddinstance'] = 'Add a course collection block to my moodle';
 $string['pluginname'] = 'Course collection';
+$string['removecoursecollection'] = 'Remove course from collection';

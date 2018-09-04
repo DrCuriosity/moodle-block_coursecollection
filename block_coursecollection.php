@@ -45,7 +45,7 @@ class block_coursecollection extends block_base {
         $this->content = new stdClass();
         $this->content->items = array();
         $this->content->icons = array();
-        $this->content->footer = 'test course collection block footer';
+        $this->content->footer = '';
 
         // The user/index.php expects course context, so get one if page has module context.
         $currentcontext = $this->page->context->get_course_context(false);
@@ -66,7 +66,47 @@ class block_coursecollection extends block_base {
             $this->content->text .= $this->config->text;
         }
 
-        $DB->get_records('block_coursecollection_map', array('userid' => $USER->id));
+        $rows = $DB->get_records_sql(
+            "SELECT c.id, shortname, fullname"
+            . " FROM {course} c"
+            . " JOIN {block_coursecollection_map} cc ON cc.courseid = c.id"
+            . " WHERE cc.userid = :userid"
+            . " ORDER BY shortname",
+            array('userid' => $USER->id)
+        );
+
+        // Prepare and build course collection table.
+        $deleteicon = $OUTPUT->pix_icon('t/delete', get_string('removecoursecollection', 'block_coursecollection'));
+
+        $tbl = "";
+        $tbl .= html_writer::start_tag('table', array('id' => 'coursecollection'));
+        foreach ($rows as $record) {
+            // Build delete link.
+            $deleteurl = new moodle_url(
+                '...',
+                array(
+                    'remove' => true,
+                    'coursecollectionid' => $record->id,
+                    'sesskey' => sesskey()
+                )
+            );
+            $deletelink = html_writer::tag('a', $deleteicon, array('href' => $deleteurl));
+
+            // Build table row.
+            $row = html_writer::start_tag('tr');
+            $row .= html_writer::start_tag('td', array('class' => 'name', 'title' => $record->fullname));
+            $row .= $record->shortname;
+            $row .= html_writer::end_tag('td');
+            $row .= html_writer::start_tag('td', array('class' => 'action'));
+            $row .= $deletelink;
+            $row .= html_writer::end_tag('td');
+            $row .= html_writer::end_tag('tr');
+
+            $tbl .= $row;
+        }
+        $tbl .= html_writer::end_tag('table');
+
+        $this->content->text .= $tbl;
 
         return $this->content;
     }
