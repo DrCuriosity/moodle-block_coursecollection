@@ -32,6 +32,7 @@ class block_coursecollection extends block_base {
 
     public function get_content() {
         global $CFG, $OUTPUT, $DB, $USER;
+        $maxdisplaycount = 5;
 
         if ($this->content !== null) {
             return $this->content;
@@ -71,8 +72,12 @@ class block_coursecollection extends block_base {
             . " FROM {course} c"
             . " JOIN {block_coursecollection_map} cc ON cc.courseid = c.id"
             . " WHERE cc.userid = :userid"
-            . " ORDER BY shortname",
-            array('userid' => $USER->id)
+            . " ORDER BY shortname"
+            . " LIMIT :max",
+            array(
+                'userid' => $USER->id,
+                'max' => $maxdisplaycount
+            )
         );
 
         // Prepare and build course collection table.
@@ -81,6 +86,7 @@ class block_coursecollection extends block_base {
 
         $tbl = html_writer::start_tag('table', array('id' => 'coursecollection'));
         foreach ($rows as $record) {
+
             // Build delete link.
             $deleteurl = new moodle_url(
                 '/blocks/coursecollection/delete.php',
@@ -103,7 +109,7 @@ class block_coursecollection extends block_base {
             $subscribelink = html_writer::tag('a', $subscribeicon, array('href' => $subscribeurl));
 
             // Build table row.
-            $row = html_writer::start_tag('tr');
+            $row  = html_writer::start_tag('tr');
             $row .= html_writer::start_tag('td', array('class' => 'name', 'title' => $record->fullname));
             $row .= $record->shortname;
             $row .= html_writer::end_tag('td');
