@@ -1,6 +1,6 @@
 {
     "name": "drcuriosity/moodle-block_coursecollection",
-    "description": "A block template for Moodle based on http://docs.moodle.org/dev/Blocks",
+    "description": "A block for displaying a collection of courses, with options to subscribe or remove.",
     "license": "GPLv3",
     "authors": [
         {
