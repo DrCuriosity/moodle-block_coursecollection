@@ -67,7 +67,7 @@ class block_coursecollection extends block_base {
         }
 
         $rows = $DB->get_records_sql(
-            "SELECT c.id, shortname, fullname"
+            "SELECT cc.id, cc.courseid, shortname, fullname"
             . " FROM {course} c"
             . " JOIN {block_coursecollection_map} cc ON cc.courseid = c.id"
             . " WHERE cc.userid = :userid"
@@ -77,13 +77,13 @@ class block_coursecollection extends block_base {
 
         // Prepare and build course collection table.
         $deleteicon = $OUTPUT->pix_icon('t/delete', get_string('removecoursecollection', 'block_coursecollection'));
+        $subscribeicon = $OUTPUT->pix_icon('t/add', get_string('subscribecoursecollection', 'block_coursecollection'));
 
-        $tbl = "";
-        $tbl .= html_writer::start_tag('table', array('id' => 'coursecollection'));
+        $tbl = html_writer::start_tag('table', array('id' => 'coursecollection'));
         foreach ($rows as $record) {
             // Build delete link.
             $deleteurl = new moodle_url(
-                '...',
+                '/blocks/coursecollection/delete.php',
                 array(
                     'remove' => true,
                     'coursecollectionid' => $record->id,
@@ -92,12 +92,23 @@ class block_coursecollection extends block_base {
             );
             $deletelink = html_writer::tag('a', $deleteicon, array('href' => $deleteurl));
 
+            $subscribeurl = new moodle_url(
+                '/...', // TODO: Find where this goes.
+                array(
+                    'subscribe' => true,
+                    'courseid' => $record->courseid,
+                    'sesskey' => sesskey()
+                )
+            );
+            $subscribelink = html_writer::tag('a', $subscribeicon, array('href' => $subscribeurl));
+
             // Build table row.
             $row = html_writer::start_tag('tr');
             $row .= html_writer::start_tag('td', array('class' => 'name', 'title' => $record->fullname));
             $row .= $record->shortname;
             $row .= html_writer::end_tag('td');
-            $row .= html_writer::start_tag('td', array('class' => 'action'));
+            $row .= html_writer::start_tag('td', array('class' => 'actions'));
+            $row .= $subscribelink;
             $row .= $deletelink;
             $row .= html_writer::end_tag('td');
             $row .= html_writer::end_tag('tr');
