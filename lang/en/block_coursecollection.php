@@ -30,4 +30,9 @@ $string['labelfoo'] = 'Config label';
 $string['coursecollection:addinstance'] = 'Add a course collection block';
 $string['coursecollection:myaddinstance'] = 'Add a course collection block to my moodle';
 $string['pluginname'] = 'Course collection';
+
+$string['deletenotfound'] = 'Course collection item not found';
+$string['deletewronguser'] = 'Cannot delete a course collection item belonging to another user';
+$string['recordeleted'] = 'Record deleted.';
 $string['removecoursecollection'] = 'Remove course from collection';
+$string['subscribecoursecollection'] = 'Subscribe to this course';
