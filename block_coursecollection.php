@@ -68,7 +68,7 @@ class block_coursecollection extends block_base {
         }
 
         $rows = $DB->get_records_sql(
-            "SELECT cc.id, cc.courseid, shortname, fullname"
+            "SELECT cc.id, cc.courseid, shortname, fullname, summary"
             . " FROM {course} c"
             . " JOIN {block_coursecollection_map} cc ON cc.courseid = c.id"
             . " WHERE cc.userid = :userid"
@@ -83,15 +83,15 @@ class block_coursecollection extends block_base {
         // Prepare and build course collection table.
         $deleteicon = $OUTPUT->pix_icon('t/delete', get_string('removecoursecollection', 'block_coursecollection'));
         $subscribeicon = $OUTPUT->pix_icon('t/add', get_string('subscribecoursecollection', 'block_coursecollection'));
+        $expandicon = $OUTPUT->pix_icon('t/collapsed', get_string('expanddescription', 'block_coursecollection'));
 
-        $tbl = html_writer::start_tag('table', array('id' => 'coursecollection'));
+        $tbl = html_writer::start_tag('ul', array('id' => 'coursecollection'));
         foreach ($rows as $record) {
 
             // Build delete link.
             $deleteurl = new moodle_url(
                 '/blocks/coursecollection/delete.php',
                 array(
-                    'remove' => true,
                     'coursecollectionid' => $record->id,
                     'sesskey' => sesskey()
                 )
@@ -107,21 +107,25 @@ class block_coursecollection extends block_base {
                 )
             );
             $subscribelink = html_writer::tag('a', $subscribeicon, array('href' => $subscribeurl));
+            $expandlink = html_writer::tag('a', $expandicon, array());
 
-            // Build table row.
-            $row  = html_writer::start_tag('tr');
-            $row .= html_writer::start_tag('td', array('class' => 'name', 'title' => $record->fullname));
-            $row .= $record->shortname;
-            $row .= html_writer::end_tag('td');
-            $row .= html_writer::start_tag('td', array('class' => 'actions'));
+            $row  = html_writer::start_tag('li');
+            $row .= html_writer::start_tag('div', array('class' => 'name', 'title' => $record->shortname));
+            $row .= $record->fullname;
+            $row .= html_writer::start_tag('span', array('class' => 'actions'));
             $row .= $subscribelink;
             $row .= $deletelink;
-            $row .= html_writer::end_tag('td');
-            $row .= html_writer::end_tag('tr');
+            $row .= $expandlink;
+            $row .= html_writer::end_tag('span');
+            $row .= html_writer::end_tag('div');
+            $row .= html_writer::start_tag('div', array('class' => 'description collapsed', 'aria-expanded' => 'false'));
+            $row .= $record->summary;
+            $row .= html_writer::end_tag('div');
+            $row .= html_writer::end_tag('li');
 
             $tbl .= $row;
         }
-        $tbl .= html_writer::end_tag('table');
+        $tbl .= html_writer::end_tag('ul');
 
         $this->content->text .= $tbl;
 
@@ -145,13 +149,5 @@ class block_coursecollection extends block_base {
 
     public function has_config() {
         return true;
-    }
-
-    public function cron() {
-            mtrace( "Hey, my cron script is running" );
-
-                 // Do something.
-
-                      return true;
     }
 }

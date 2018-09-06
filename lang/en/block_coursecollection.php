@@ -36,3 +36,4 @@ $string['deletewronguser'] = 'Cannot delete a course collection item belonging t
 $string['recordeleted'] = 'Record deleted.';
 $string['removecoursecollection'] = 'Remove course from collection';
 $string['subscribecoursecollection'] = 'Subscribe to this course';
+$string['expanddescription'] = 'Show course details';

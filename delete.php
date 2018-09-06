@@ -31,13 +31,7 @@ $context = context_system::instance();
 $PAGE->set_context($context);
 $adminroot = admin_get_root(false, false); // Settings not required - only pages.
 
-$remove = required_param('remove', PARAM_INT);
 $collectionid = required_param('coursecollectionid', PARAM_INT);
-
-if (!$remove) {
-    // TODO: Confirmation?
-    echo "Really remove (record $collectionid)?";
-}
 
 if (confirm_sesskey()) {
     $rec = $DB->get_record('block_coursecollection_map', array('id' => $collectionid));
