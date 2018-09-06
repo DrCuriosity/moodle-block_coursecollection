@@ -31,7 +31,7 @@ class block_coursecollection extends block_base {
     }
 
     public function get_content() {
-        global $CFG, $OUTPUT, $DB, $USER;
+        global $CFG, $OUTPUT, $DB, $USER, $PAGE;
         $maxdisplaycount = 5;
 
         if ($this->content !== null) {
@@ -59,9 +59,6 @@ class block_coursecollection extends block_base {
         if (empty($currentcontext)) {
             return $this->content;
         }
-        if ($this->page->course->id == SITEID) {
-            $this->content->text .= "site context";
-        }
 
         if (! empty($this->config->text)) {
             $this->content->text .= $this->config->text;
@@ -85,7 +82,7 @@ class block_coursecollection extends block_base {
         $subscribeicon = $OUTPUT->pix_icon('t/add', get_string('subscribecoursecollection', 'block_coursecollection'));
         $expandicon = $OUTPUT->pix_icon('t/collapsed', get_string('expanddescription', 'block_coursecollection'));
 
-        $tbl = html_writer::start_tag('ul', array('id' => 'coursecollection'));
+        $collection = html_writer::start_tag('ul', array('id' => 'coursecollection'));
         foreach ($rows as $record) {
 
             // Build delete link.
@@ -93,7 +90,8 @@ class block_coursecollection extends block_base {
                 '/blocks/coursecollection/delete.php',
                 array(
                     'coursecollectionid' => $record->id,
-                    'sesskey' => sesskey()
+                    'sesskey' => sesskey(),
+                    'return' => $PAGE->url
                 )
             );
             $deletelink = html_writer::tag('a', $deleteicon, array('href' => $deleteurl));
@@ -109,25 +107,25 @@ class block_coursecollection extends block_base {
             $subscribelink = html_writer::tag('a', $subscribeicon, array('href' => $subscribeurl));
             $expandlink = html_writer::tag('a', $expandicon, array());
 
-            $row  = html_writer::start_tag('li');
-            $row .= html_writer::start_tag('div', array('class' => 'name', 'title' => $record->shortname));
-            $row .= $record->fullname;
-            $row .= html_writer::start_tag('span', array('class' => 'actions'));
-            $row .= $subscribelink;
-            $row .= $deletelink;
-            $row .= $expandlink;
-            $row .= html_writer::end_tag('span');
-            $row .= html_writer::end_tag('div');
-            $row .= html_writer::start_tag('div', array('class' => 'description collapsed', 'aria-expanded' => 'false'));
-            $row .= $record->summary;
-            $row .= html_writer::end_tag('div');
-            $row .= html_writer::end_tag('li');
+            $item  = html_writer::start_tag('li');
+            $item .= html_writer::start_tag('div', array('class' => 'name', 'title' => $record->shortname));
+            $item .= $record->fullname;
+            $item .= html_writer::start_tag('span', array('class' => 'actions'));
+            $item .= $subscribelink;
+            $item .= $deletelink;
+            $item .= $expandlink;
+            $item .= html_writer::end_tag('span');
+            $item .= html_writer::end_tag('div');
+            $item .= html_writer::start_tag('div', array('class' => 'description collapsed', 'aria-expanded' => 'false'));
+            $item .= $record->summary;
+            $item .= html_writer::end_tag('div');
+            $item .= html_writer::end_tag('li');
 
-            $tbl .= $row;
+            $collection .= $item;
         }
-        $tbl .= html_writer::end_tag('ul');
+        $collection .= html_writer::end_tag('ul');
 
-        $this->content->text .= $tbl;
+        $this->content->text .= $collection;
 
         return $this->content;
     }
