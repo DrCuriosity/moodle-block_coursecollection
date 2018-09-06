@@ -32,6 +32,13 @@ $PAGE->set_context($context);
 $adminroot = admin_get_root(false, false); // Settings not required - only pages.
 
 $collectionid = required_param('coursecollectionid', PARAM_INT);
+$confirm = optional_param('confirm', 0, PARAM_INT);
+
+$returnurl = $CFG->wwwroot . "/?redirect=0";
+$confirmurl = new moodle_url("/blocks/coursecollection/delete.php", array(
+    'coursecollectionid' => $collectionid,
+    'confirm' => 1
+));
 
 if (confirm_sesskey()) {
     $rec = $DB->get_record('block_coursecollection_map', array('id' => $collectionid));
@@ -39,21 +46,25 @@ if (confirm_sesskey()) {
     if ($rec) {
         // Users should only be able to remove their own records.
         if ($USER->id == $rec->userid) {
-            $DB->delete_records('block_coursecollection_map', array('id' => $collectionid));
-            // TODO: Proper success notification?
-            echo get_string('recorddeleted', 'block_coursecollection');
-            $returnurl = $CFG->wwwroot . "/?redirect=0";
-            redirect($returnurl);
+            $course = $DB->get_record('course', array('id' => $rec->courseid));
+
+            if (!$confirm) {
+                echo $OUTPUT->confirm(
+                    get_string('deleterecordconfirm', 'block_coursecollection', $course),
+                    $confirmurl,
+                    $returnurl
+                );
+            } else {
+                $DB->delete_records('block_coursecollection_map', array('id' => $collectionid));
+                echo get_string('recorddeleted', 'block_coursecollection', $course);
+                // TODO: Proper success notification?
+            }
         } else {
             // TODO: Proper error reporting.
             echo get_string('deletewronguser', 'block_coursecollection');
-            die();
         }
     } else {
         // Record 'coursecollectionid' Not found.
         echo get_string('deletenotfound', 'block_coursecollection');
-        die();
     }
-
-
 }

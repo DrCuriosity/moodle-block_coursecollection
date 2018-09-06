@@ -32,8 +32,9 @@ $string['coursecollection:myaddinstance'] = 'Add a course collection block to my
 $string['pluginname'] = 'Course collection';
 
 $string['deletenotfound'] = 'Course collection item not found';
-$string['deletewronguser'] = 'Cannot delete a course collection item belonging to another user';
-$string['recordeleted'] = 'Record deleted.';
+$string['deletewronguser'] = 'Cannot remove a course collection item belonging to another user';
+$string['recorddeleted'] = 'Course {$a->fullname} removed.';
 $string['removecoursecollection'] = 'Remove course from collection';
 $string['subscribecoursecollection'] = 'Subscribe to this course';
 $string['expanddescription'] = 'Show course details';
+$string['deleterecordconfirm'] = 'Really remove course "{$a->fullname}" from collection?';
