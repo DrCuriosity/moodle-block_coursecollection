@@ -34,9 +34,10 @@ $adminroot = admin_get_root(false, false); // Settings not required - only pages
 $collectionid = required_param('coursecollectionid', PARAM_INT);
 $confirm = optional_param('confirm', 0, PARAM_INT);
 $returnurl = optional_param('return', $CFG->wwwroot, PARAM_LOCALURL);
-$confirmurl = new moodle_url("/blocks/coursecollection/delete.php", array(
+$confirmurl = new moodle_url('/blocks/coursecollection/delete.php', array(
     'coursecollectionid' => $collectionid,
-    'confirm' => 1
+    'confirm' => 1,
+    'return' => $returnurl
 ));
 
 
@@ -49,23 +50,26 @@ if (confirm_sesskey()) {
             $course = $DB->get_record('course', array('id' => $rec->courseid));
 
             if (!$confirm) {
-                echo $returnurl;
+                $PAGE->set_url('/blocks/coursecollection/delete.php', array(
+                    'coursecollectionid' => $collectionid,
+                    'return' => $returnurl
+                ));
+                echo $OUTPUT->header();
                 echo $OUTPUT->confirm(
                     get_string('deleterecordconfirm', 'block_coursecollection', $course),
                     $confirmurl,
                     $returnurl
                 );
+                echo $OUTPUT->footer();
             } else {
                 $DB->delete_records('block_coursecollection_map', array('id' => $collectionid));
                 redirect($returnurl, get_string('recorddeleted', 'block_coursecollection', $course));
-                // TODO: Proper success notification?
             }
         } else {
-            // TODO: Proper error reporting.
-            echo get_string('deletewronguser', 'block_coursecollection');
+            redirect($returnurl, get_string('deletewronguser', 'block_coursecollection'));
         }
     } else {
         // Record 'coursecollectionid' Not found.
-        echo get_string('deletenotfound', 'block_coursecollection');
+        redirect($returnurl, get_string('deletenotfound', 'block_coursecollection'));
     }
 }

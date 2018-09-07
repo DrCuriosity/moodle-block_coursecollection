@@ -31,7 +31,7 @@ $string['coursecollection:addinstance'] = 'Add a course collection block';
 $string['coursecollection:myaddinstance'] = 'Add a course collection block to my moodle';
 $string['pluginname'] = 'Course collection';
 
-$string['deletenotfound'] = 'Course collection item not found';
+$string['deletenotfound'] = 'Could not remove course collection item: item not found';
 $string['deletewronguser'] = 'Cannot remove a course collection item belonging to another user';
 $string['recorddeleted'] = 'Course {$a->fullname} removed.';
 $string['removecoursecollection'] = 'Remove course from collection';
