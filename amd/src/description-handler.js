@@ -37,17 +37,6 @@ define(['jquery', 'core/url', 'core/str'], function($, url, str) {
                 $desc.toggle();
                 $(this).attr('src', $(this).attr('src') == collapsedUrl ? expandedUrl : collapsedUrl);
             })
-            // .a.expandtoggle')
-            // if (targetnode.hasClass('hide')) {
-            //     targetnode.removeClass('hide');
-            //     targetnode.addClass('visible');
-            //     targetnode.attr('aria-expanded', true);
-            //     thisnode.find(':header i.fa').removeClass('fa-plus-square');
-            //     thisnode.find(':header i.fa').addClass('fa-minus-square');
-
-            // .click(function(e){
-            //   $desc.toggle();
-            // });
         }
     };
 });
