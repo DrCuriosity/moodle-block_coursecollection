@@ -27,11 +27,15 @@ defined('MOODLE_INTERNAL') || die();
 class block_coursecollection extends block_base {
 
     public function init() {
+        global $PAGE;
+
         $this->title = get_string('pluginname', 'block_coursecollection');
+        $PAGE->requires->js_call_amd('block_coursecollection/description-handler', 'init');
     }
 
     public function get_content() {
         global $CFG, $OUTPUT, $DB, $USER, $PAGE;
+
         $maxdisplaycount = 5;
 
         if ($this->content !== null) {
@@ -79,8 +83,7 @@ class block_coursecollection extends block_base {
 
         // Prepare and build course collection table.
         $deleteicon = $OUTPUT->pix_icon('t/delete', get_string('removecoursecollection', 'block_coursecollection'));
-        $subscribeicon = $OUTPUT->pix_icon('t/add', get_string('subscribecoursecollection', 'block_coursecollection'));
-        $expandicon = $OUTPUT->pix_icon('t/collapsed', get_string('expanddescription', 'block_coursecollection'));
+        $enrolicon = $OUTPUT->pix_icon('t/add', get_string('enrolcoursecollection', 'block_coursecollection'));
 
         $collection = html_writer::start_tag('ul', array('id' => 'coursecollection'));
         foreach ($rows as $record) {
@@ -96,27 +99,24 @@ class block_coursecollection extends block_base {
             );
             $deletelink = html_writer::tag('a', $deleteicon, array('href' => $deleteurl));
 
-            $subscribeurl = new moodle_url(
-                '/...', // TODO: Find where this goes.
+            $enrolurl = new moodle_url(
+                '/enrol/index.php',
                 array(
-                    'subscribe' => true,
-                    'courseid' => $record->courseid,
+                    'id' => $record->courseid,
                     'sesskey' => sesskey()
                 )
             );
-            $subscribelink = html_writer::tag('a', $subscribeicon, array('href' => $subscribeurl));
-            $expandlink = html_writer::tag('a', $expandicon, array());
+            $enrollink = html_writer::tag('a', $enrolicon, array('href' => $enrolurl));
 
             $item  = html_writer::start_tag('li');
             $item .= html_writer::start_tag('div', array('class' => 'name', 'title' => $record->shortname));
             $item .= $record->fullname;
             $item .= html_writer::start_tag('span', array('class' => 'actions'));
-            $item .= $subscribelink;
+            $item .= $enrollink;
             $item .= $deletelink;
-            $item .= $expandlink;
             $item .= html_writer::end_tag('span');
             $item .= html_writer::end_tag('div');
-            $item .= html_writer::start_tag('div', array('class' => 'description collapsed', 'aria-expanded' => 'false'));
+            $item .= html_writer::start_tag('div', array('class' => 'description'));
             $item .= $record->summary;
             $item .= html_writer::end_tag('div');
             $item .= html_writer::end_tag('li');

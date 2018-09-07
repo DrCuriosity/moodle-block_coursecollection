@@ -35,6 +35,6 @@ $string['deletenotfound'] = 'Could not remove course collection item: item not f
 $string['deletewronguser'] = 'Cannot remove a course collection item belonging to another user';
 $string['recorddeleted'] = 'Course {$a->fullname} removed.';
 $string['removecoursecollection'] = 'Remove course from collection';
-$string['subscribecoursecollection'] = 'Subscribe to this course';
+$string['enrolcoursecollection'] = 'Enrol in this course';
 $string['expanddescription'] = 'Show course details';
 $string['deleterecordconfirm'] = 'Really remove course "{$a->fullname}" from collection?';
