@@ -34,9 +34,9 @@ class block_coursecollection extends block_base {
     }
 
     public function get_content() {
-        global $CFG, $OUTPUT, $DB, $USER, $PAGE;
+        global $CFG, $OUTPUT, $DB, $USER, $PAGE, $COURSE;
 
-        $maxdisplaycount = 5;
+        $maxdisplaycount = 5; // TODO: Block config setting.
 
         if ($this->content !== null) {
             return $this->content;
@@ -60,14 +60,14 @@ class block_coursecollection extends block_base {
         }
 
         $this->content->text = '';
-        if (empty($currentcontext)) {
-            return $this->content;
-        }
 
         if (! empty($this->config->text)) {
             $this->content->text .= $this->config->text;
         }
 
+        /* TODO: Opportunistically delete any records where a user has already
+         * enrolled? Or just filter against the appropriate table(s)?
+         */
         $rows = $DB->get_records_sql(
             "SELECT cc.id, cc.courseid, shortname, fullname, summary"
             . " FROM {course} c"
@@ -126,6 +126,31 @@ class block_coursecollection extends block_base {
         $collection .= html_writer::end_tag('ul');
 
         $this->content->text .= $collection;
+
+        /* Is this is:
+         * - A course page?
+         * - But not the front page?
+         * - A course that the current user is not already enrolled in?
+         */
+         // TODO: Check current course is in the coursecollection?
+        $coursenotenrolledin = $currentcontext->contextlevel == CONTEXT_COURSE
+            && $COURSE->id != SITEID
+            && !is_enrolled($currentcontext, $USER);
+
+        // If this is a course, add a link to self-enrol.
+        if ($coursenotenrolledin) {
+            $enrolurl = new moodle_url(
+                '/enrol/index.php',
+                array(
+                    'id' => $COURSE->id,
+                    'sesskey' => sesskey()
+                )
+            );
+            $enrollink = html_writer::tag('a',
+                $enrolicon . get_string('enrolcoursecollection', 'block_coursecollection'),
+                array('href' => $enrolurl, 'class' => 'selfenrol'));
+            $this->content->text .= $enrollink;
+        }
 
         return $this->content;
     }
