@@ -127,29 +127,29 @@ class block_coursecollection extends block_base {
 
         $this->content->text .= $collection;
 
-        /* Is this is:
+        /* Is this is...
          * - A course page?
          * - But not the front page?
          * - A course that the current user is not already enrolled in?
          */
-         // TODO: Check current course is in the coursecollection?
+         // TODO: Check current course is not already in the coursecollection.
         $coursenotenrolledin = $currentcontext->contextlevel == CONTEXT_COURSE
             && $COURSE->id != SITEID
             && !is_enrolled($currentcontext, $USER);
 
-        // If this is a course, add a link to self-enrol.
+        // If current course is not enrolled in, and not already in the collection...
         if ($coursenotenrolledin) {
-            $enrolurl = new moodle_url(
-                '/enrol/index.php',
+            $addurl = new moodle_url(
+                '/blocks/coursecollection/add.php',
                 array(
                     'id' => $COURSE->id,
                     'sesskey' => sesskey()
                 )
             );
-            $enrollink = html_writer::tag('a',
-                $enrolicon . get_string('enrolcoursecollection', 'block_coursecollection'),
-                array('href' => $enrolurl, 'class' => 'selfenrol'));
-            $this->content->text .= $enrollink;
+            $addlink = html_writer::tag('a',
+                $enrolicon . get_string('addcoursecollection', 'block_coursecollection'),
+                array('href' => $addurl, 'class' => 'addcoursecollection'));
+            $this->content->text .= $addlink;
         }
 
         return $this->content;
