@@ -87,7 +87,7 @@ class block_coursecollection extends block_base {
         $courseincollection = false; // Default unless we discovered it is.
 
         foreach ($rows as $record) {
-            if ($record->courseid == $COURSE->id) {
+            if ($currentcontext->contextlevel == CONTEXT_COURSE && $record->courseid == $COURSE->id) {
                 $courseincollection = true;
             }
 
