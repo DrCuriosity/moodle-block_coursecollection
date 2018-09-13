@@ -65,9 +65,6 @@ class block_coursecollection extends block_base {
             $this->content->text .= $this->config->text;
         }
 
-        /* TODO: Opportunistically delete any records where a user has already
-         * enrolled? Or just filter against the appropriate table(s)?
-         */
         $rows = $DB->get_records_sql(
             "SELECT cc.id, cc.courseid, shortname, fullname, summary"
             . " FROM {course} c"
@@ -86,7 +83,17 @@ class block_coursecollection extends block_base {
         $enrolicon = $OUTPUT->pix_icon('t/add', get_string('enrolcoursecollection', 'block_coursecollection'));
 
         $collection = html_writer::start_tag('ul', array('id' => 'coursecollection'));
+
+        $courseincollection = false; // Default unless we discovered it is.
+
         foreach ($rows as $record) {
+            if ($record->courseid == $COURSE->id) {
+                $courseincollection = true;
+            }
+
+            /* TODO: Opportunistically delete any records where a user has already
+             * enrolled? Or just filter against the appropriate table(s)?
+             */
 
             // Build delete link.
             $deleteurl = new moodle_url(
@@ -132,18 +139,18 @@ class block_coursecollection extends block_base {
          * - But not the front page?
          * - A course that the current user is not already enrolled in?
          */
-         // TODO: Check current course is not already in the coursecollection.
         $coursenotenrolledin = $currentcontext->contextlevel == CONTEXT_COURSE
             && $COURSE->id != SITEID
             && !is_enrolled($currentcontext, $USER);
 
         // If current course is not enrolled in, and not already in the collection...
-        if ($coursenotenrolledin) {
+        if ($coursenotenrolledin && !$courseincollection) {
             $addurl = new moodle_url(
                 '/blocks/coursecollection/add.php',
                 array(
-                    'id' => $COURSE->id,
-                    'sesskey' => sesskey()
+                    'courseid' => $COURSE->id,
+                    'sesskey' => sesskey(),
+                    'return' => $PAGE->url
                 )
             );
             $addlink = html_writer::tag('a',

@@ -33,9 +33,13 @@ $string['pluginname'] = 'Course collection';
 
 $string['deletenotfound'] = 'Could not remove course collection item: item not found';
 $string['deletewronguser'] = 'Cannot remove a course collection item belonging to another user';
-$string['recorddeleted'] = 'Course {$a->fullname} removed.';
+$string['recorddeleted'] = 'Course "{$a->shortname}" removed.';
 $string['removecoursecollection'] = 'Remove this course from collection';
 $string['enrolcoursecollection'] = 'Enrol in this course';
 $string['addcoursecollection'] = 'Add this course';
 $string['expanddescription'] = 'Show course details';
 $string['deleterecordconfirm'] = 'Really remove course "{$a->fullname}" from collection?';
+$string['addinvalidcourse'] = 'Course ID {$a} cannot be added to your course collection.';
+$string['coursealreadyadded'] = 'Course "{$a->shortname}" is already in your course collection.';
+$string['coursealreadyenrolled'] = 'You are already enrolled in "{$a->shortname}", so you cannot add it to your collection.';
+$string['courseadded'] = 'Added "{$a->shortname}" to your course collection.';
