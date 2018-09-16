@@ -17,7 +17,7 @@
 /**
  * Version details
  *
- * @package    block_course_list
+ * @package    block_coursecollection
  * @copyright  2018 David Thompson <david.thompson@catalyst.net.nz>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
