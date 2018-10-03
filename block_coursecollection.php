@@ -162,15 +162,8 @@ class block_coursecollection extends block_base {
         return $this->content;
     }
 
-    // My moodle can only have SITEID and it's redundant here, so take it away.
     public function applicable_formats() {
-        return array('all' => false,
-                     'site' => true,
-                     'site-index' => true,
-                     'course-view' => true,
-                     'course-view-social' => false,
-                     'mod' => true,
-                     'mod-quiz' => false);
+        return array('all' => true);
     }
 
     public function instance_allow_multiple() {
