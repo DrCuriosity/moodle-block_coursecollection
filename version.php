@@ -25,5 +25,5 @@
 defined('MOODLE_INTERNAL') || die();
 
 $plugin->version   = 2018090300;        // The current plugin version (Date: YYYYMMDDXX)
-$plugin->requires  = 2018051701;        // Requires this Moodle version
+$plugin->requires  = 2015051110;        // Requires this Moodle version.
 $plugin->component = 'block_coursecollection';
