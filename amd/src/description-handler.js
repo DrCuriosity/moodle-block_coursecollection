@@ -24,19 +24,19 @@
 define(['jquery', 'core/url', 'core/str'], function($, url, str) {
 
     var expandedUrl = url.imageUrl('t/expanded');
-    var collapsedUrl = url.imageUrl('t/collapsed')
+    var collapsedUrl = url.imageUrl('t/collapsed');
 
     return {
         init: function() {
             $('#coursecollection .description').hide();
             $('#coursecollection .name').prepend($('<img alt="" src="' + collapsedUrl + '"/>'));
 
-            $('#coursecollection .name img').click(function(e){
+            $('#coursecollection .name img').click(function(){
 
-                $desc = $(this).parent().next();
+                var $desc = $(this).parent().next();
                 $desc.toggle();
                 $(this).attr('src', $(this).attr('src') == collapsedUrl ? expandedUrl : collapsedUrl);
-            })
+            });
         }
     };
 });
